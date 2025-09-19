@@ -1,19 +1,32 @@
-import React from "react"
+
+import { useState } from "react"
 
 interface CardProps {
 	id: number
-	clicks?: number
-	createdAt?: Date
 }
 
-const Card = ({ id, clicks, createdAt }: CardProps) => {
+const CardComponent = ({ id }: CardProps) => {
+	const [clicks, setClicks] = useState(0)
+	const [createdAt, setCreatedAt] = useState<Date>()
+
+	const updateClicks = () => {
+		if (clicks == 0) {
+			setCreatedAt(new Date())
+		}
+
+		setClicks(clicks + 1)
+	}
+
 	return (
-		<div>
+		<button
+			onClick={updateClicks}
+			className="border w-40 px-4 py-6 space-y-6"
+		>
+			<p>{clicks}</p>
 			<p>{id}</p>
-			<p>{clicks ?? 0}</p>
-			<p>{createdAt?.toDateString() ?? "Click me!"}</p>
-		</div>
+			<p className="text-center"> {createdAt?.toLocaleTimeString() ?? "00:00:00 PM"}</p>
+		</button>
 	)
 }
 
-export { Card }
+export { CardComponent }
