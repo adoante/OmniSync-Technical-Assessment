@@ -9,7 +9,6 @@ export type UpdateCardRequest = {
 }
 
 export type CreateCardRequest = {
-	clicks: number
 	createdAt: Date
 }
 
