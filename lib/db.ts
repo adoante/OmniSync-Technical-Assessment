@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { Card } from "@/types/card";
+import { Card, UpdateCardRequest } from "@/types/card";
 import { CreateCardRequest } from "@/types/card";
 
 const pool = new Pool({
@@ -34,4 +34,22 @@ const deleteCards = async () => {
 	return result.rowCount
 }
 
-export { createCard, getCards, deleteCards }
+const getCard = async (id: number) => {
+	const result = await pool.query<Card>("SELECT * FROM cards WHERE id = $1", [id])
+	return result.rows[0]
+}
+
+const updateCard = async (card: UpdateCardRequest): Promise<Card> => {
+	const result = await pool.query<Card>(
+		`
+		UPDATE cards
+		SET clicks = $1
+		WHERE id = $2
+		RETURNING *
+		`,
+		[card.clicks, card.id]
+	)
+	return result.rows[0]
+}
+
+export { createCard, getCards, deleteCards, updateCard, getCard }
