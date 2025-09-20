@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { Card } from "@/types/card";
+import { CreateCardRequest } from "@/types/card";
 
 const pool = new Pool({
 	user: process.env.DB_USER,
@@ -9,21 +10,22 @@ const pool = new Pool({
 	port: Number(process.env.DB_PORT)
 })
 
-const getCards = async () => {
-	const result = await pool.query<Card>("SELECT id FROM cards")
+const getCards = async (): Promise<Card[]> => {
+	const result = await pool.query<Card>("SELECT * FROM cards")
 	const cards: Card[] = result.rows
-	console.log(cards)
+	return cards
 }
 
-const createCard = async (card: Card) => {
+const createCard = async (create: CreateCardRequest): Promise<Card> => {
 	const result = await pool.query<Card>(
 		`
-		INSERT INTO cards (clicks, created_at)
-		VALUES ($1, $2, $3)
+		INSERT INTO cards (created_at)
+		VALUES ($1)
 		RETURNING *
-		`
+		`,
+		[create.createdAt]
 	)
 	return result.rows[0]
 }
 
-export { getCards, createCard }
+export { createCard, getCards }
