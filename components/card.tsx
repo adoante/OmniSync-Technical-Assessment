@@ -1,25 +1,13 @@
-
-import { useState } from "react"
-
 interface CardProps {
 	id: number
+	clicks: number
+	createdAt: Date
 }
 
-const CardComponent = ({ id }: CardProps) => {
-	const [clicks, setClicks] = useState(0)
-	const [createdAt, setCreatedAt] = useState<Date>()
-
-	const updateClicks = () => {
-		if (clicks == 0) {
-			setCreatedAt(new Date())
-		}
-
-		setClicks(clicks + 1)
-	}
-
+const CardComponent = ({ id, clicks, createdAt }: CardProps) => {
 	return (
 		<button
-			onClick={updateClicks}
+			onClick={() => console.log(`Card: ${id} clicked!`)}
 			className="border md:w-40 md:px-4 md:py-6 md:space-y-6 space-y-4 w-30 py-3"
 		>
 			<p>{clicks}</p>
