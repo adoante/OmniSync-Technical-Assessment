@@ -1,7 +1,7 @@
 export type Card = {
 	id: number
 	clicks: number
-	createdAt: Date
+	createdAt?: Date
 }
 
 export type UpdateCardRequest = {
