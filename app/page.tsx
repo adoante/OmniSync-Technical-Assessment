@@ -45,16 +45,44 @@ export default function Home() {
 		setCards(updatedCards)
 	}
 
+	const sortCards = (sort: string) => {
+		let sorted = [...cards]
+		switch (sort) {
+			case "Most Clicks":
+				sorted = sorted.sort((a, b) => b.clicks - a.clicks)
+				break;
+			case "Fewest Clicks":
+				sorted = sorted.sort((a, b) => a.clicks - b.clicks)
+				break;
+			case "First Clicked":
+				sorted = sorted.sort((a, b) => (a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0))
+				break;
+			case "Last Clicked":
+				sorted = sorted.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0))
+				break;
+		}
+		setCards(sorted)
+	}
+
 	return (
-		<>
-			<button onClick={clearCards}>Clear</button>
-			<div className="border grid grid-cols-3 grid-rows-x gap-y-4 gap-x-4 md:grid-cols-4 md:grid-rows-2 max-w-fit mx-auto md:gap-y-4 md:gap-x-4">
+		<div className="space-y-15">
+			<span className="flex flex-row justify-between max-w-2xl mx-auto">
+				<button className="border px-4" onClick={clearCards}>Clear</button>
+
+				<select className="border bg-[var(--background)] focus:outline-none" onChange={(e) => sortCards(e.target.value)}>
+					<option>Most Clicks</option>
+					<option>Fewest Clicks</option>
+					<option>First Clicked</option>
+					<option>Last Clicked</option>
+				</select>
+			</span>
+			<div className="grid grid-cols-3 grid-rows-x gap-y-4 gap-x-4 md:grid-cols-4 md:grid-rows-2 max-w-fit mx-auto md:gap-y-4 md:gap-x-4">
 				{cards.map((card, index) =>
 					<button onClick={() => incrementClick(index)} key={index}>
 						<CardComponent id={card.id} clicks={card.clicks} createdAt={card.createdAt} />
 					</button>
 				)}
 			</div>
-		</>
+		</div>
 	)
 }
