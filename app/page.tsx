@@ -43,6 +43,7 @@ export default function Home() {
 			card.createdAt = undefined
 		})
 		setCards(updatedCards)
+		sortCards("Card ID")
 	}
 
 	const sortCards = (sort: string) => {
@@ -60,6 +61,8 @@ export default function Home() {
 			case "Last Clicked":
 				sorted = sorted.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0))
 				break;
+			case "Card ID":
+				sorted = sorted.sort((a, b) => a.id - b.id)
 		}
 		setCards(sorted)
 	}
