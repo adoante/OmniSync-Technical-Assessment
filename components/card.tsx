@@ -20,7 +20,7 @@ const CardComponent = ({ id }: CardProps) => {
 	return (
 		<button
 			onClick={updateClicks}
-			className="border w-40 px-4 py-6 space-y-6"
+			className="border md:w-40 md:px-4 md:py-6 md:space-y-6 space-y-4 w-30 py-3"
 		>
 			<p>{clicks}</p>
 			<p>{id}</p>
