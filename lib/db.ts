@@ -28,4 +28,10 @@ const createCard = async (create: CreateCardRequest): Promise<Card> => {
 	return result.rows[0]
 }
 
-export { createCard, getCards }
+const deleteCards = async () => {
+	const result = await pool.query<Card>("DELETE FROM cards *")
+	await pool.query<Card>("TRUNCATE TABLE cards RESTART IDENTITY")
+	return result.rowCount
+}
+
+export { createCard, getCards, deleteCards }
