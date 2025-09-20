@@ -5,6 +5,7 @@ export type Card = {
 }
 
 export type UpdateCardRequest = {
+	id: number
 	clicks: number
 }
 
