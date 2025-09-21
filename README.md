@@ -20,6 +20,37 @@ docker compose up --build
 - [http://localhost:3000]()
 - check docker logs if above link doesn't work
 ---
+### Notes on the development process
+Overall a very interesting and fun project that hits every full stack skill. I'm glad to have completed the project.
+It really exposed some weaknesses that I worked through and am better equipped to handle now.
+
+The project was familiar to me because of my previous experience with React + JavaScript/TypeScript projects,
+especially my choice of Next.js for the Frontend. Creating the Card component and the home page was easy
+and so was the logic without database integration.
+
+The newest aspect to me for this project was using Next.js App Router for the API. I am more familiar with
+FastAPI/Pydantic but I thought that the core principles translated well. I did get confused for a few commits.
+I was reading Next.js Page Router docs for a while and couldn't figure out why I was getting a 500 internal error.
+Eventually, I realized I reading the wrong docs!
+
+Integrating the database with the logic for the home page did cause me some trouble. At first I was making API calls
+every time a Card was clicked to update its click counter! It the updating click counter on the card was slow and
+inaccurate to what was being recorded in the database. I decided to update the database on set interval with the
+current click counts which lets the user spam clicks with an immediante visual update on the card. The biggest
+draw back is that at most the database is of sync from the client by the update interval time. I think adding a
+debounce where after a period of no clicking an API request is made to update the database would have imporved 
+syncing.
+
+For the database I decided not to use an ORM. I would normally use SQLModel/SQLAlchemy with FastAPI to define
+schemas and request/response models but considering the time frame I went with the "pg" package and wrote SQL
+queries to grab from the postgreSQL database. In hindsight using an ORM like Prisma might have some more time
+and headache but that's just another lesson to learn from.
+
+Thanks for reading!<br>
+Best, <br>
+Adolfo Gante
+
+---
 ### Tech Stack
 
 - **Frontend**: React + TypeScript
