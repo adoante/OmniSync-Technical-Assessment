@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { createCard, deleteCards, getCards } from "@/lib/db";
-import type { Card, CreateCardRequest, CardsResponse, CardResponse } from "@/types/card";
+import type { Card, CardsResponse, CardResponse } from "@/types/card";
 
 export async function POST() {
-	const request: CreateCardRequest = { createdAt: new Date() }
-	const card: Card = await createCard(request)
+	const card: Card = await createCard()
 	const response: CardResponse = { card: card }
 	return NextResponse.json(response, { status: 200 })
 }
