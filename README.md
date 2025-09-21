@@ -11,7 +11,7 @@
 ## TO DO
 
 ### Frontend Requirements
-
+---
 Display eight cards, numbered 1 through 8, laid out in a 2x4 grid.
 - [x] The layout should be responsive for mobile.
 
@@ -38,8 +38,8 @@ Bonus Ideas (Optional)
 - [ ] Add a **dark mode** toggle.
 - [ ] Add **animations** when cards are clicked or reordered.
 
-## Backend + Database Requirements
-
+### Backend + Database Requirements
+---
 Use PostgreSQL to store:
 - [x] Click count for each card.
 - [x] First click timestamp.
@@ -52,8 +52,8 @@ Provide necessary API routes to:
 - [x] Read, write, and update click data.
 - [x] Reset the database state when the Clear button is pressed.
 
-## Dockerization Requirements
-
+### Dockerization Requirements
+---
 Include a `Dockerfile` and `docker-compose.yml` file that:
 - [ ] Spins up both the frontend and backend services.
 - [ ] Starts a local PostgreSQL instance with a seeded schema/table for the card data.
