@@ -8,11 +8,9 @@
 - **Styling** TailwindCSS
 - **Deployment**: Docker
 
-## TO DO
-
 ### Frontend Requirements
 ---
-Display eight cards, numbered 1 through 8, laid out in a 2x4 grid.
+- [x] Display eight cards, numbered 1 through 8, laid out in a 2x4 grid.
 - [x] The layout should be responsive for mobile.
 
 Each card should:
