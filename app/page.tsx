@@ -13,28 +13,33 @@ export default function Home() {
 				Array.from({ length: 8 }, async () => {
 					const response = await fetch("/api/cards", { method: "POST" })
 					const data = await response.json()
-					return data.card
+
+					return {
+						...data.card,
+						time: data.card.time ? new Date(data.card.time) : null
+					}
 				})
 			)
 
 			cards.sort((a, b) => a.id - b.id)
 			setCards(cards)
-			console.log(cards)
-
 		} catch (err) {
 			console.error("Error creating cards: ", err)
 		}
-
 	}
 
 	const getCards = async () => {
 		try {
 			const response = await fetch("/api/cards", { method: "GET" })
 			const data = await response.json()
-			return data.deck
 
+			return data.deck.map((card: any) => ({
+				...card,
+				time: card.time ? new Date(card.time) : null
+			}))
 		} catch (err) {
 			console.error("Error getting cards: ", err)
+			return []
 		}
 	}
 
@@ -45,13 +50,16 @@ export default function Home() {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(request)
 			})
+
 			const data = await response.json()
-			return data.card
 
+			return {
+				...data.card,
+				time: data.card.time ? new Date(data.card.time) : null
+			}
 		} catch (err) {
-			console.error("Error creating cards: ", err)
+			console.error("Error updatinging cards: ", err)
 		}
-
 	}
 
 	useEffect(() => {
@@ -78,7 +86,7 @@ export default function Home() {
 			})
 
 			for (const card of changed) {
-				const request: UpdateCardRequest = { id: card.id, clicks: card.clicks, createdAt: card.createdAt }
+				const request: UpdateCardRequest = { id: card.id, clicks: card.clicks, time: card.time }
 				await updateCard(request)
 			}
 
@@ -106,7 +114,7 @@ export default function Home() {
 		const card = updatedCards[index]
 
 		if (card.clicks == 0) {
-			card.createdAt = new Date()
+			card.time = new Date()
 		}
 
 		card.clicks += 1
@@ -129,17 +137,28 @@ export default function Home() {
 				sorted = sorted.sort((a, b) => a.clicks - b.clicks)
 				break
 			case "First Clicked":
-				sorted = sorted.sort((a, b) => (a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0))
+				sorted = sorted.sort((a, b) => (a.time?.getTime() ?? 0) - (b.time?.getTime() ?? 0))
 				break
 			case "Last Clicked":
-				sorted = sorted.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0))
+				sorted = sorted.sort((a, b) => (b.time?.getTime() ?? 0) - (a.time?.getTime() ?? 0))
 				break
 		}
 		setCards(sorted)
 	}
 
 	useEffect(() => {
-		createCards()
+		const checkEmpty = async () => {
+			const deck: Card[] = await getCards()
+
+			if (!deck.length) {
+				await createCards()
+			} else {
+				const sortedDeck = deck.sort((a, b) => (a.time?.getTime() ?? 0) - (b.time?.getTime() ?? 0))
+				setCards(sortedDeck)
+			}
+		}
+
+		checkEmpty()
 	}, [])
 
 	return (
@@ -157,7 +176,7 @@ export default function Home() {
 			<div className="grid grid-cols-3 grid-rows-x gap-y-4 gap-x-4 md:grid-cols-4 md:grid-rows-2 max-w-fit mx-auto md:gap-y-4 md:gap-x-4">
 				{cards.map((card, index) =>
 					<button onClick={() => incrementClick(index)} key={index}>
-						<CardComponent id={card.id} clicks={card.clicks} createdAt={card.createdAt} />
+						<CardComponent id={card.id} clicks={card.clicks} time={card.time} />
 					</button>
 				)}
 			</div>
