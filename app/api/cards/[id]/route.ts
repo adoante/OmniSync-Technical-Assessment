@@ -17,9 +17,10 @@ export async function PUT(
 
 export async function GET(
 	_request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
-	const card: Card = await getCard(Number(params.id))
+	const { id } = await params
+	const card: Card = await getCard(Number(id))
 	const response: CardResponse = { card: card }
 	return NextResponse.json(response, { status: 200 })
 }

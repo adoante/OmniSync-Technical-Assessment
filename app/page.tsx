@@ -33,7 +33,7 @@ export default function Home() {
 			const response = await fetch("/api/cards", { method: "GET" })
 			const data = await response.json()
 
-			return data.deck.map((card: any) => ({
+			return data.deck.map((card: Card) => ({
 				...card,
 				time: card.time ? new Date(card.time) : null
 			}))
@@ -91,7 +91,7 @@ export default function Home() {
 			}
 
 			fetching = false
-		}, 5000)
+		}, 2000)
 
 		return () => clearInterval(interval)
 	}, [cards])

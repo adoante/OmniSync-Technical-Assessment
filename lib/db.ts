@@ -39,7 +39,7 @@ const getCard = async (id: number) => {
 const updateCard = async (card: UpdateCardRequest): Promise<Card> => {
 	let query = "UPDATE cards SET clicks = $1"
 
-	const params: any[] = [card.clicks];
+	const params: (number | Date)[] = [card.clicks];
 
 	if (card.time) {
 		query += ", time = $2 WHERE id = $3 RETURNING *";
