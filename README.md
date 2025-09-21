@@ -1,5 +1,25 @@
 # Fullstack Web Developer Assessment
 
+### Instructions for running the project locally
+1. Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) installed and running
+- Git installed
+
+2. Clone the repository
+```bash
+git clone https://github.com/adoante/OmniSync-Technical-Assessment.git
+cd OmniSync-Technical-Assessment
+```
+
+3. Start up the docker container
+```bash
+docker compose up --build
+```
+
+4. Go to localhost website<br>
+- [http://localhost:3000]()
+- check docker logs if above link doesn't work
+---
 ### Tech Stack
 
 - **Frontend**: React + TypeScript
@@ -7,9 +27,9 @@
 - **Database**: PostgreSQL
 - **Styling** TailwindCSS
 - **Deployment**: Docker
-
-### Frontend Requirements
 ---
+### Frontend Requirements
+
 - [x] Display eight cards, numbered 1 through 8, laid out in a 2x4 grid.
 - [x] The layout should be responsive for mobile.
 
@@ -35,9 +55,9 @@ Include a **Clear** button that:
 Bonus Ideas (Optional)
 - [ ] Add a **dark mode** toggle.
 - [ ] Add **animations** when cards are clicked or reordered.
-
-### Backend + Database Requirements
 ---
+### Backend + Database Requirements
+
 Use PostgreSQL to store:
 - [x] Click count for each card.
 - [x] First click timestamp.
@@ -49,9 +69,9 @@ On page load, read from the database to:
 Provide necessary API routes to:
 - [x] Read, write, and update click data.
 - [x] Reset the database state when the Clear button is pressed.
-
-### Dockerization Requirements
 ---
+### Dockerization Requirements
+
 Include a `Dockerfile` and `docker-compose.yml` file that:
 - [x] Spins up both the frontend and backend services.
 - [x] Starts a local PostgreSQL instance with a seeded schema/table for the card data.
