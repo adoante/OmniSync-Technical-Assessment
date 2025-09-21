@@ -1,6 +1,5 @@
 import { Pool } from "pg";
 import { Card, UpdateCardRequest } from "@/types/card";
-import { CreateCardRequest } from "@/types/card";
 
 const pool = new Pool({
 	user: process.env.DB_USER,
@@ -16,14 +15,12 @@ const getCards = async (): Promise<Card[]> => {
 	return cards
 }
 
-const createCard = async (create: CreateCardRequest): Promise<Card> => {
+const createCard = async (): Promise<Card> => {
 	const result = await pool.query<Card>(
 		`
-		INSERT INTO cards (created_at)
-		VALUES ($1)
+		INSERT INTO cards DEFAULT VALUES
 		RETURNING *
 		`,
-		[create.createdAt]
 	)
 	return result.rows[0]
 }
@@ -40,16 +37,20 @@ const getCard = async (id: number) => {
 }
 
 const updateCard = async (card: UpdateCardRequest): Promise<Card> => {
-	const result = await pool.query<Card>(
-		`
-		UPDATE cards
-		SET clicks = $1
-		WHERE id = $2
-		RETURNING *
-		`,
-		[card.clicks, card.id]
-	)
-	return result.rows[0]
-}
+	let query = "UPDATE cards SET clicks = $1"
+
+	const params: any[] = [card.clicks];
+
+	if (card.createdAt) {
+		query += ", created_at = $2 WHERE id = $3 RETURNING *";
+		params.push(card.createdAt, card.id);
+	} else {
+		query += " WHERE id = $2 RETURNING *";
+		params.push(card.id);
+	}
+
+	const result = await pool.query<Card>(query, params);
+	return result.rows[0];
+};
 
 export { createCard, getCards, deleteCards, updateCard, getCard }
