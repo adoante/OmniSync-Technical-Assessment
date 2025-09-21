@@ -7,10 +7,7 @@ export type Card = {
 export type UpdateCardRequest = {
 	id: number
 	clicks: number
-}
-
-export type CreateCardRequest = {
-	createdAt: Date
+	createdAt?: Date
 }
 
 export type CardResponse = {
