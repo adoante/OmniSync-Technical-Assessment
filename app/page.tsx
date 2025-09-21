@@ -1,6 +1,8 @@
 "use client"
 
 import { CardComponent } from "@/components/card"
+import DarkModeToggle from "@/components/darkmode"
+import ThemeToggle from "@/components/darkmode"
 import type { Card, UpdateCardRequest } from "@/types/card"
 import { useState, useEffect } from "react"
 
@@ -175,27 +177,34 @@ export default function Home() {
 	}, [])
 
 	return (
-		<div className="flex flex-col justify-center items-center min-h-screen space-y-8">
-			<span className="flex flex-col md:flex-row md:w-1/2 justify-between items-center w-full md:space-y-0 space-y-4">
-				<select
-					className="border bg-[var(--background)] focus:outline-none px-2 py-1 hover:cursor-pointer"
-					onChange={(e) => sortCards(e.target.value)}
-				>
-					<option>Most Clicks</option>
-					<option>Fewest Clicks</option>
-					<option>First Clicked</option>
-					<option>Last Clicked</option>
-				</select>
-
-				<button className="border px-4 py-1 hover:cursor-pointer" onClick={clearCards}>Clear</button>
-			</span>
-
+		<div className="flex flex-col justify-center items-center min-h-screen space-y-8 px-4">
 			<div className="grid grid-cols-3 gap-4 md:grid-cols-4 md:gap-4">
+				<span className="flex flex-col md:flex-row justify-between items-center w-full md:space-y-0 space-y-4 col-span-3 md:col-span-4">
+					<select
+						className="border bg-[var(--background)] focus:outline-none px-2 py-1 cursor-pointer hover:border-[var(--highlight)]"
+						onChange={(e) => sortCards(e.target.value)}
+					>
+						<option>Most Clicks</option>
+						<option>Fewest Clicks</option>
+						<option>First Clicked</option>
+						<option>Last Clicked</option>
+					</select>
+
+					<button className="border px-4 py-1 cursor-pointer hover:border-[var(--highlight)]" onClick={clearCards}>
+						Clear
+					</button>
+				</span>
+
 				{cards.map((card, index) => (
-					<button className="hover:cursor-pointer" key={index} onClick={() => incrementClick(index)}>
+					<button
+						className="cursor-pointer"
+						key={index}
+						onClick={() => incrementClick(index)}
+					>
 						<CardComponent id={card.id} clicks={card.clicks} time={card.time} />
 					</button>
 				))}
+				<DarkModeToggle />
 			</div>
 		</div>
 

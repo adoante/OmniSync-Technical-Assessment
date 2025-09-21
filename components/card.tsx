@@ -7,7 +7,7 @@ interface CardProps {
 
 const CardComponent = ({ id, clicks, time }: CardProps) => {
 	return (
-		<div className="border text-center md:w-40 md:px-4 md:py-6 md:space-y-6 space-y-4 w-30 py-3">
+		<div className="border text-center md:w-40 md:px-4 md:py-6 md:space-y-6 space-y-4 w-30 py-3 hover:border-[var(--highlight)] shadow">
 			<p>{clicks}</p>
 			<p>{id}</p>
 			<p> {time?.toLocaleTimeString() ?? "00:00:00 PM"}</p>
