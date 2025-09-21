@@ -4,12 +4,14 @@
 	--background: #2d2d2d;
 	--foreground: #ffffff;
 	--highlight: #FFA500;
+	--item-bg: #191919;
 }
 
 [data-theme="dark"] {
 	--background: #d1d5db;
 	--foreground: #2d2d2d;
 	--highlight: #38bdf8;
+	--item-bg: #ffffff;
 }
 
 body {

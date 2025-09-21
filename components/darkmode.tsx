@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion"
 
 export default function DarkModeToggle() {
 	const [dark, setDark] = useState(false);
@@ -13,11 +14,15 @@ export default function DarkModeToggle() {
 	}, [dark]);
 
 	return (
-		<button
-			className="border text-center md:w-40 w-30 py-2 hover:cursor-pointer hover:border-[var(--highlight)]"
+		<motion.button
+			whileHover={{ scale: 1.1 }}
+			whileTap={{ scale: 0.95 }}
+			initial={{ opacity: 0, scale: 0 }}
+			animate={{ opacity: 1, scale: 1 }}
+			className="text-center md:w-40 w-30 py-2 hover:cursor-pointer hover:text-[var(--highlight)] bg-[var(--item-bg)]"
 			onClick={() => setDark(!dark)}
 		>
 			{dark ? "White Mode" : "Dark Mode"}
-		</button>
+		</motion.button>
 	);
 }

@@ -1,13 +1,14 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { CardComponent } from "@/components/card"
 import DarkModeToggle from "@/components/darkmode"
-import ThemeToggle from "@/components/darkmode"
 import type { Card, UpdateCardRequest } from "@/types/card"
 import { useState, useEffect } from "react"
 
 export default function Home() {
 	const [cards, setCards] = useState<Card[]>([])
+	const [flipCards, setFlipCard] = useState(false)
 
 	// Creates 8 new cards, converts time from string to Date, sorts by id and updates cards state
 	const createCards = async () => {
@@ -88,7 +89,7 @@ export default function Home() {
 
 			// only update cards with new data
 			sortedCards.forEach((card, index) => {
-				if (card.clicks != deck[index].clicks) {
+				if (deck && card.clicks != deck[index].clicks) {
 					changed.push(card)
 				}
 			})
@@ -136,11 +137,13 @@ export default function Home() {
 	const clearCards = async () => {
 		await deleteCards()
 		await createCards()
+		setFlipCard(prev => !prev)
 	}
 
 	// Sorts cards on <select> value change
 	const sortCards = (sort: string) => {
 		let sorted = [...cards]
+
 		switch (sort) {
 			case "Most Clicks":
 				// similar to python's sorted(list, key=lamda reverse)
@@ -156,6 +159,8 @@ export default function Home() {
 				sorted = sorted.sort((a, b) => (b.time?.getTime() ?? 0) - (a.time?.getTime() ?? 0))
 				break
 		}
+
+		setFlipCard(prev => !prev)
 		setCards(sorted)
 	}
 
@@ -177,36 +182,69 @@ export default function Home() {
 	}, [])
 
 	return (
-		<div className="flex flex-col justify-center items-center min-h-screen space-y-8 px-4">
-			<div className="grid grid-cols-3 gap-4 md:grid-cols-4 md:gap-4">
-				<span className="flex flex-col md:flex-row justify-between items-center w-full md:space-y-0 space-y-4 col-span-3 md:col-span-4">
-					<select
-						className="border bg-[var(--background)] focus:outline-none px-2 py-1 cursor-pointer hover:border-[var(--highlight)]"
-						onChange={(e) => sortCards(e.target.value)}
-					>
-						<option>Most Clicks</option>
-						<option>Fewest Clicks</option>
-						<option>First Clicked</option>
-						<option>Last Clicked</option>
-					</select>
+		<motion.div
+			className="flex flex-col justify-center items-center min-h-screen space-y-8 px-4">
+			<motion.div
+				initial={{ opacity: 0, scale: 0 }}
+				animate={{ opacity: 1, scale: 1, rotate: 360 }}
+				transition={{ duration: 1, ease: "easeIn" }}
 
-					<button className="border px-4 py-1 cursor-pointer hover:border-[var(--highlight)]" onClick={clearCards}>
+				className="grid grid-cols-3 gap-4 md:grid-cols-4 md:gap-4">
+				<span className="flex flex-col md:flex-row justify-between items-center w-full md:space-y-0 space-y-4 col-span-3 md:col-span-4">
+					<DarkModeToggle />
+					<motion.button
+						whileHover={{ scale: 1.1 }}
+						whileTap={{ scale: 0.95 }}
+						initial={{ opacity: 0, scale: 0 }}
+						animate={{ opacity: 1, scale: 1 }}
+						className="px-4 py-1 cursor-pointer hover:text-[var(--highlight)] bg-[var(--item-bg)]"
+						onClick={clearCards}
+					>
 						Clear
-					</button>
+					</motion.button>
 				</span>
 
 				{cards.map((card, index) => (
-					<button
-						className="cursor-pointer"
+
+					<motion.button
 						key={index}
+						className="cursor-pointer hover:text-[var(--highlight)]"
+						whileHover={{
+							scale: 1.1,
+							transition: { duration: 0.1 }
+						}}
+						whileTap={{
+							scale: 0.95,
+							transition: { duration: 0.1 }
+						}}
+						initial={{ rotateY: 0 }}
+						animate={flipCards ? "active" : "inactive"}
+						variants={{
+							inactive: { rotateY: 0 },
+							active: { rotateY: 360 },
+						}}
+						transition={{ duration: 0.6, ease: "easeInOut" }}
+						style={{ transformStyle: "preserve-3d" }}
 						onClick={() => incrementClick(index)}
 					>
 						<CardComponent id={card.id} clicks={card.clicks} time={card.time} />
-					</button>
+					</motion.button>
 				))}
-				<DarkModeToggle />
-			</div>
-		</div>
+				<motion.select
+					whileHover={{ scale: 1.1 }}
+					whileTap={{ scale: 0.95 }}
+					initial={{ opacity: 0, scale: 0 }}
+					animate={{ opacity: 1, scale: 1 }}
+					className="focus:outline-none px-2 py-1 cursor-pointer mx-auto hover:text-[var(--highlight)] bg-[var(--item-bg)] col-span-3 md:col-span-4 text-center w-min"
+					onChange={(e) => sortCards(e.target.value)}
+				>
+					<option>Most Clicks</option>
+					<option>Fewest Clicks</option>
+					<option>First Clicked</option>
+					<option>Last Clicked</option>
+				</motion.select>
+			</motion.div>
+		</motion.div >
 
 	)
 }
