@@ -4,11 +4,12 @@ import type { Card, CardResponse, UpdateCardRequest } from "@/types/card";
 
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	const body = await request.json()
 
-	const updateCardRequest: UpdateCardRequest = { id: Number(params.id), ...body }
+	const updateCardRequest: UpdateCardRequest = { id: Number(id), ...body }
 	const card: Card = await updateCard(updateCardRequest)
 	const response: CardResponse = { card: card }
 	return NextResponse.json(response, { status: 200 })
