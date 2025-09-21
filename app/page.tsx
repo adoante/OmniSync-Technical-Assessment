@@ -1,29 +1,107 @@
 "use client"
 
 import { CardComponent } from "@/components/card"
-import type { Card } from "@/types/card"
+import type { Card, UpdateCardRequest } from "@/types/card"
 import { useState, useEffect } from "react"
 
 export default function Home() {
 	const [cards, setCards] = useState<Card[]>([])
 
+	const createCards = async () => {
+		try {
+			const cards: Card[] = await Promise.all(
+				Array.from({ length: 8 }, async () => {
+					const response = await fetch("/api/cards", { method: "POST" })
+					const data = await response.json()
+					return data.card
+				})
+			)
+
+			cards.sort((a, b) => a.id - b.id)
+			setCards(cards)
+			console.log(cards)
+
+		} catch (err) {
+			console.error("Error creating cards: ", err)
+		}
+
+	}
+
+	const getCards = async () => {
+		try {
+			const response = await fetch("/api/cards", { method: "GET" })
+			const data = await response.json()
+			return data.deck
+
+		} catch (err) {
+			console.error("Error getting cards: ", err)
+		}
+	}
+
+	const updateCard = async (request: UpdateCardRequest) => {
+		try {
+			const response = await fetch(`/api/cards/${request.id}`, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(request)
+			})
+			const data = await response.json()
+			return data.card
+
+		} catch (err) {
+			console.error("Error creating cards: ", err)
+		}
+
+	}
+
 	useEffect(() => {
-		// Dummy data for now
-		const data: Card[] = [
-			{ "id": 1, "clicks": 0 },
-			{ "id": 2, "clicks": 0 },
-			{ "id": 3, "clicks": 0 },
-			{ "id": 4, "clicks": 0 },
-			{ "id": 5, "clicks": 0 },
-			{ "id": 6, "clicks": 0 },
-			{ "id": 7, "clicks": 0 },
-			{ "id": 8, "clicks": 0 },
-		]
+		let fetching = false
 
-		setCards(data)
-	}, [])
+		const interval = setInterval(async () => {
+			if (fetching) {
+				return
+			}
 
-	const incrementClick = (index: number) => {
+			fetching = true
+
+			let deck: Card[] = await getCards()
+			deck = deck.sort((a, b) => a.id - b.id)
+
+			const sortedCards = cards.sort((a, b) => a.id - b.id)
+
+			const changed: Card[] = []
+
+			sortedCards.forEach((card, index) => {
+				if (card.clicks != deck[index].clicks) {
+					changed.push(card)
+				}
+			})
+
+			for (const card of changed) {
+				const request: UpdateCardRequest = { id: card.id, clicks: card.clicks, createdAt: card.createdAt }
+				await updateCard(request)
+			}
+
+			fetching = false
+		}, 10000)
+
+		return () => clearInterval(interval)
+	}, [cards])
+
+	const deleteCards = async () => {
+		try {
+			await fetch("/api/cards", { method: "DELETE" })
+				.then(response => response.json())
+				.then(data => {
+					console.log(data)
+				})
+
+		} catch (err) {
+			console.error("Error creating cards: ", err)
+		}
+	}
+
+	const incrementClick = async (index: number) => {
 		const updatedCards = [...cards]
 		const card = updatedCards[index]
 
@@ -31,19 +109,14 @@ export default function Home() {
 			card.createdAt = new Date()
 		}
 
-		card.clicks = card.clicks += 1
+		card.clicks += 1
 
 		setCards(updatedCards)
 	}
 
-	const clearCards = () => {
-		const updatedCards = [...cards]
-		updatedCards.forEach((card) => {
-			card.clicks = 0
-			card.createdAt = undefined
-		})
-		setCards(updatedCards)
-		sortCards("Card ID")
+	const clearCards = async () => {
+		await deleteCards()
+		await createCards()
 	}
 
 	const sortCards = (sort: string) => {
@@ -51,21 +124,23 @@ export default function Home() {
 		switch (sort) {
 			case "Most Clicks":
 				sorted = sorted.sort((a, b) => b.clicks - a.clicks)
-				break;
+				break
 			case "Fewest Clicks":
 				sorted = sorted.sort((a, b) => a.clicks - b.clicks)
-				break;
+				break
 			case "First Clicked":
 				sorted = sorted.sort((a, b) => (a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0))
-				break;
+				break
 			case "Last Clicked":
 				sorted = sorted.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0))
-				break;
-			case "Card ID":
-				sorted = sorted.sort((a, b) => a.id - b.id)
+				break
 		}
 		setCards(sorted)
 	}
+
+	useEffect(() => {
+		createCards()
+	}, [])
 
 	return (
 		<div className="space-y-15">
