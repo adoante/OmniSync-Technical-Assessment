@@ -91,7 +91,7 @@ export default function Home() {
 			}
 
 			fetching = false
-		}, 10000)
+		}, 5000)
 
 		return () => clearInterval(interval)
 	}, [cards])
