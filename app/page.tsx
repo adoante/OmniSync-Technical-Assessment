@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 export default function Home() {
 	const [cards, setCards] = useState<Card[]>([])
 
+	// Creates 8 new cards, converts time from string to Date, sorts by id and updates cards state
 	const createCards = async () => {
 		try {
 			const cards: Card[] = await Promise.all(
@@ -28,6 +29,7 @@ export default function Home() {
 		}
 	}
 
+	// Fetches all cards from the API, converts time from string to Date and returns the cards
 	const getCards = async () => {
 		try {
 			const response = await fetch("/api/cards", { method: "GET" })
@@ -43,6 +45,7 @@ export default function Home() {
 		}
 	}
 
+	// Updates a card by ID, converts its time from string to Date and returns the card
 	const updateCard = async (request: UpdateCardRequest) => {
 		try {
 			const response = await fetch(`/api/cards/${request.id}`, {
@@ -62,7 +65,9 @@ export default function Home() {
 		}
 	}
 
+	// Updates the server every 2 sec with the clients cards click counts
 	useEffect(() => {
+		// Avoid double fetching when getting database card data
 		let fetching = false
 
 		const interval = setInterval(async () => {
@@ -79,6 +84,7 @@ export default function Home() {
 
 			const changed: Card[] = []
 
+			// only update cards with new data
 			sortedCards.forEach((card, index) => {
 				if (card.clicks != deck[index].clicks) {
 					changed.push(card)
@@ -96,6 +102,7 @@ export default function Home() {
 		return () => clearInterval(interval)
 	}, [cards])
 
+	// Deletes all cards from the database
 	const deleteCards = async () => {
 		try {
 			await fetch("/api/cards", { method: "DELETE" })
@@ -105,10 +112,11 @@ export default function Home() {
 				})
 
 		} catch (err) {
-			console.error("Error creating cards: ", err)
+			console.error("Error deleting cards: ", err)
 		}
 	}
 
+	// Increments the click count for client side cards and sets timestamp on first click
 	const incrementClick = async (index: number) => {
 		const updatedCards = [...cards]
 		const card = updatedCards[index]
@@ -122,15 +130,18 @@ export default function Home() {
 		setCards(updatedCards)
 	}
 
+	// Delete's all database data and creates cards
 	const clearCards = async () => {
 		await deleteCards()
 		await createCards()
 	}
 
+	// Sorts cards on <select> value change
 	const sortCards = (sort: string) => {
 		let sorted = [...cards]
 		switch (sort) {
 			case "Most Clicks":
+				// similar to python's sorted(list, key=lamda reverse)
 				sorted = sorted.sort((a, b) => b.clicks - a.clicks)
 				break
 			case "Fewest Clicks":
@@ -146,6 +157,8 @@ export default function Home() {
 		setCards(sorted)
 	}
 
+	// On page load get cards from database and sort by earliest click
+	// If no data create cards sorted by ID
 	useEffect(() => {
 		const checkEmpty = async () => {
 			const deck: Card[] = await getCards()

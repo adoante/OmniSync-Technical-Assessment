@@ -1,3 +1,4 @@
+// component does not handle its own state for id, clicks or time
 interface CardProps {
 	id: number
 	clicks: number
