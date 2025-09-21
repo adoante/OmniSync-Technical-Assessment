@@ -175,24 +175,29 @@ export default function Home() {
 	}, [])
 
 	return (
-		<div className="space-y-15">
-			<span className="flex flex-row justify-between max-w-2xl mx-auto">
-				<button className="border px-4" onClick={clearCards}>Clear</button>
-
-				<select className="border bg-[var(--background)] focus:outline-none" onChange={(e) => sortCards(e.target.value)}>
+		<div className="flex flex-col justify-center items-center min-h-screen space-y-8">
+			<span className="flex flex-col md:flex-row md:w-1/2 justify-between items-center w-full md:space-y-0 space-y-4">
+				<select
+					className="border bg-[var(--background)] focus:outline-none px-2 py-1 hover:cursor-pointer"
+					onChange={(e) => sortCards(e.target.value)}
+				>
 					<option>Most Clicks</option>
 					<option>Fewest Clicks</option>
 					<option>First Clicked</option>
 					<option>Last Clicked</option>
 				</select>
+
+				<button className="border px-4 py-1 hover:cursor-pointer" onClick={clearCards}>Clear</button>
 			</span>
-			<div className="grid grid-cols-3 grid-rows-x gap-y-4 gap-x-4 md:grid-cols-4 md:grid-rows-2 max-w-fit mx-auto md:gap-y-4 md:gap-x-4">
-				{cards.map((card, index) =>
-					<button onClick={() => incrementClick(index)} key={index}>
+
+			<div className="grid grid-cols-3 gap-4 md:grid-cols-4 md:gap-4">
+				{cards.map((card, index) => (
+					<button className="hover:cursor-pointer" key={index} onClick={() => incrementClick(index)}>
 						<CardComponent id={card.id} clicks={card.clicks} time={card.time} />
 					</button>
-				)}
+				))}
 			</div>
 		</div>
+
 	)
 }
