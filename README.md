@@ -1,6 +1,6 @@
 # Fullstack Web Developer Assessment
 
-## Tech Stack
+### Tech Stack
 
 - **Frontend**: React + TypeScript
 - **Backend**: Next.js for fullstack
@@ -8,7 +8,9 @@
 - **Styling** TailwindCSS
 - **Deployment**: Docker
 
-## Frontend Requirements
+## TO DO
+
+### Frontend Requirements
 
 Display eight cards, numbered 1 through 8, laid out in a 2x4 grid.
 - [x] The layout should be responsive for mobile.
@@ -33,8 +35,8 @@ Include a **Clear** button that:
 - [x] Reflects these changes both in the UI and the database.
 
 Bonus Ideas (Optional)
-- [x] Add a **dark mode** toggle.
-- [x] Add **animations** when cards are clicked or reordered.
+- [ ] Add a **dark mode** toggle.
+- [ ] Add **animations** when cards are clicked or reordered.
 
 ## Backend + Database Requirements
 
@@ -53,7 +55,7 @@ Provide necessary API routes to:
 ## Dockerization Requirements
 
 Include a `Dockerfile` and `docker-compose.yml` file that:
-- [x] Spins up both the frontend and backend services.
-- [x] Starts a local PostgreSQL instance with a seeded schema/table for the card data.
-- [x] app can be launched with a single `docker-compose up` command.
+- [ ] Spins up both the frontend and backend services.
+- [ ] Starts a local PostgreSQL instance with a seeded schema/table for the card data.
+- [ ] app can be launched with a single `docker-compose up` command.
 
