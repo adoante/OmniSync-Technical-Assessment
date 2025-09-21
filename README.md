@@ -48,6 +48,9 @@ Best, <br>
 Adolfo Gante
 
 ---
+https://github.com/user-attachments/assets/21d52f2b-d153-46c8-81c4-617c9fdae9b1
+
+---
 ### Tech Stack
 
 - **Frontend**: React + TypeScript
