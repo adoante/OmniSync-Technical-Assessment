@@ -84,8 +84,8 @@ Include a **Clear** button that:
 - [x] Reflects these changes both in the UI and the database.
 
 Bonus Ideas (Optional)
-- [ ] Add a **dark mode** toggle.
-- [ ] Add **animations** when cards are clicked or reordered.
+- [x] Add a **dark mode** toggle.
+- [x] Add **animations** when cards are clicked or reordered.
 ---
 ### Backend + Database Requirements
 
