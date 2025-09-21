@@ -1,13 +1,13 @@
 export type Card = {
 	id: number
 	clicks: number
-	createdAt?: Date
+	time?: Date | null
 }
 
 export type UpdateCardRequest = {
 	id: number
 	clicks: number
-	createdAt?: Date
+	time?: Date | null
 }
 
 export type CardResponse = {
