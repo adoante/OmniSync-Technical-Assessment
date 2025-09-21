@@ -53,7 +53,7 @@ Provide necessary API routes to:
 ### Dockerization Requirements
 ---
 Include a `Dockerfile` and `docker-compose.yml` file that:
-- [ ] Spins up both the frontend and backend services.
-- [ ] Starts a local PostgreSQL instance with a seeded schema/table for the card data.
-- [ ] app can be launched with a single `docker-compose up` command.
+- [x] Spins up both the frontend and backend services.
+- [x] Starts a local PostgreSQL instance with a seeded schema/table for the card data.
+- [x] app can be launched with a single `docker-compose up` command.
 
