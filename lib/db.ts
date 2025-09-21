@@ -41,16 +41,16 @@ const updateCard = async (card: UpdateCardRequest): Promise<Card> => {
 
 	const params: any[] = [card.clicks];
 
-	if (card.createdAt) {
-		query += ", created_at = $2 WHERE id = $3 RETURNING *";
-		params.push(card.createdAt, card.id);
+	if (card.time) {
+		query += ", time = $2 WHERE id = $3 RETURNING *";
+		params.push(card.time, card.id);
 	} else {
 		query += " WHERE id = $2 RETURNING *";
 		params.push(card.id);
 	}
 
 	const result = await pool.query<Card>(query, params);
-	return result.rows[0];
-};
+	return result.rows[0]
+}
 
 export { createCard, getCards, deleteCards, updateCard, getCard }
